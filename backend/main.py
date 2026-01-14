@@ -276,7 +276,7 @@ async def download_video(
                     loop
                 )
 
-                )
+
 
         ydl_opts = get_yt_dlp_opts(target_format_id)
         ydl_opts.update({
