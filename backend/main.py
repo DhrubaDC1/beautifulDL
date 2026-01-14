@@ -348,10 +348,7 @@ async def serve_file(filename: str, name: str = None):
     return FileResponse(
         path=file_path,
         filename=download_filename,
-        media_type=media_type,
-        headers={
-            "Content-Disposition": f'attachment; filename="{download_filename}"'
-        }
+        media_type=media_type
     )
 
 
