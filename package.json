@@ -1,5 +1,5 @@
 {
-  "name": "streamsnag",
+  "name": "local-stream",
   "version": "1.0.0",
   "private": true,
   "description": "YouTube video downloader with FastAPI backend and React frontend",

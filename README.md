@@ -1,4 +1,4 @@
-# StreamSnag - YouTube Video Downloader
+# Local Stream - YouTube Video Downloader
 
 A premium YouTube video downloader with a modern glassmorphism UI.
 

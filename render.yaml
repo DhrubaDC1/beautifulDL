@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: streamsnag-backend
+    name: local-stream-backend
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
@@ -9,12 +9,12 @@ services:
     healthCheckPath: /health
     envVars:
       - key: ALLOWED_ORIGINS
-        value: https://streamsnag-frontend.onrender.com
+        value: https://local-stream-frontend.onrender.com
       - key: PORT
         value: 8000
 
   - type: web
-    name: streamsnag-frontend
+    name: local-stream-frontend
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
@@ -28,4 +28,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://streamsnag-backend.onrender.com
+        value: https://local-stream-backend.onrender.com

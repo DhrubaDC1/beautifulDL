@@ -12,7 +12,7 @@ import yt_dlp
 import json
 from cache import RedisCache
 
-app = FastAPI(title="StreamSnag API")
+app = FastAPI(title="Local Stream API")
 
 # CORS configuration
 def get_allowed_origins():

@@ -172,7 +172,7 @@ function App() {
             </svg>
           </div>
           <h1 className="title">
-            <span className="text-gradient">StreamSnag</span>
+            <span className="text-gradient">Local Stream</span>
           </h1>
           <p className="subtitle">
             Download YouTube videos in stunning quality
