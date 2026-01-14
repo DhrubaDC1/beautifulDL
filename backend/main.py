@@ -86,13 +86,20 @@ def extract_video_id(url: str) -> str | None:
     return None
 
 def get_yt_dlp_opts(format_id: str = "best") -> dict:
-    """Base yt-dlp options."""
-    return {
+    """Base yt-dlp options with optional cookies support."""
+    opts = {
         "format": format_id,
         "quiet": True,
         "no_warnings": True,
         "extract_flat": False,
     }
+    
+    # Check for cookies file in env or common locations
+    cookies_path = os.getenv("COOKIES_FILE_PATH", "cookies.txt")
+    if os.path.exists(cookies_path):
+        opts["cookiefile"] = cookies_path
+        
+    return opts
 
 
 @app.get("/api/info")
@@ -106,11 +113,7 @@ async def get_video_info(url: str = Query(..., description="YouTube URL")):
             if cached_info:
                 return cached_info
 
-        ydl_opts = {
-            "quiet": True,
-            "no_warnings": True,
-            "extract_flat": False,
-        }
+        ydl_opts = get_yt_dlp_opts()
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             # Run in executor to avoid blocking event loop
@@ -193,7 +196,8 @@ async def download_video(
 
         # First get video title for filename
         def get_info():
-            with yt_dlp.YoutubeDL({"quiet": True}) as ydl:
+            opts = get_yt_dlp_opts()
+            with yt_dlp.YoutubeDL(opts) as ydl:
                 return ydl.extract_info(url, download=False)
         
         info = await asyncio.to_thread(get_info)
@@ -272,13 +276,13 @@ async def download_video(
                     loop
                 )
 
-        ydl_opts = {
-            "format": target_format_id,
+                )
+
+        ydl_opts = get_yt_dlp_opts(target_format_id)
+        ydl_opts.update({
             "outtmpl": output_template,
-            "quiet": True,
-            "no_warnings": True,
             "progress_hooks": [progress_hook]
-        }
+        })
         
         def run_download():
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
