@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const WS_BASE = API_BASE.replace(/^http/, "ws");
 
 interface VideoFormat {
   format_id: string;
@@ -88,7 +89,7 @@ function App() {
     const clientId = Math.random().toString(36).substring(7);
     
     // Connect to WebSocket
-    const ws = new WebSocket(`ws://localhost:8000/api/ws/${clientId}`);
+    const ws = new WebSocket(`${WS_BASE}/api/ws/${clientId}`);
     
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);

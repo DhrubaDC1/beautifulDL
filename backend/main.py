@@ -14,10 +14,17 @@ from cache import RedisCache
 
 app = FastAPI(title="StreamSnag API")
 
-# CORS for local development
+# CORS configuration
+def get_allowed_origins():
+    """Get allowed origins from env or use defaults for local dev."""
+    env_origins = os.getenv("ALLOWED_ORIGINS")
+    if env_origins:
+        return [origin.strip() for origin in env_origins.split(",")]
+    return ["http://localhost:5173", "http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
