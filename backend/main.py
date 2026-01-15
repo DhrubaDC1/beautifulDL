@@ -95,9 +95,17 @@ def get_yt_dlp_opts(format_id: str = "best") -> dict:
     }
     
     # Check for cookies file in env or common locations
-    cookies_path = os.getenv("COOKIES_FILE_PATH", "cookies.txt")
+    cookies_path = os.getenv("COOKIES_FILE_PATH", "/etc/secrets/cookies.txt")
+    
+    # Fallback to local default if secrets path not found
+    if not os.path.exists(cookies_path):
+        cookies_path = "cookies.txt"
+
     if os.path.exists(cookies_path):
+        print(f"DEBUG: Found cookies at {cookies_path}")
         opts["cookiefile"] = cookies_path
+    else:
+        print(f"DEBUG: Cookies file NOT found at {cookies_path} or default locations")
         
     return opts
 
