@@ -94,27 +94,11 @@ def get_yt_dlp_opts(format_id: str = "best") -> dict:
         "extract_flat": False,
     }
     
-    # Check for cookies file in env or common locations
-    source_cookies = os.getenv("COOKIES_FILE_PATH", "/etc/secrets/cookies.txt")
-    
-    # Fallback to local default if secrets path not found
-    if not os.path.exists(source_cookies):
-        source_cookies = "cookies.txt"
-
-    if os.path.exists(source_cookies):
-        # COPY to a writable location (yt-dlp tries to update cookies)
-        temp_cookies = "/tmp/cookies.txt"
-        try:
-            import shutil
-            shutil.copy2(source_cookies, temp_cookies)
-            print(f"DEBUG: Copied cookies from {source_cookies} to {temp_cookies}")
-            opts["cookiefile"] = temp_cookies
-        except Exception as e:
-            print(f"WARNING: Could not copy cookies: {e}")
-            # Fallback to source, might fail if read-only
-            opts["cookiefile"] = source_cookies
-    else:
-        print(f"DEBUG: Cookies file NOT found at {source_cookies} or default locations")
+    # Check for Proxy in env
+    proxy_url = os.getenv("PROXY_URL")
+    if proxy_url:
+        print(f"DEBUG: Using proxy")
+        opts["proxy"] = proxy_url
         
     return opts
 
